@@ -1,4 +1,4 @@
-module spotify
+module github.com/domwong/spotify-micro/api-spotify
 
 go 1.14
 

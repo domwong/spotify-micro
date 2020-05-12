@@ -3,7 +3,7 @@ package handler
 import (
 	"context"
 
-	sps "github.com/domwong/spotify-micro/service.spotify/proto/spotify"
+	sps "github.com/domwong/spotify-micro/service-spotify/proto/spotify"
 )
 
 type Spotify struct {
