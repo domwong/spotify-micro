@@ -1,13 +1,14 @@
 package main
 
 import (
-	"spotify/handler"
-	"spotify/subscriber"
+	"github.com/domwong/spotify-micro/service-spotify/dao"
+	"github.com/domwong/spotify-micro/service-spotify/handler"
+	"github.com/domwong/spotify-micro/service-spotify/subscriber"
 
 	"github.com/micro/go-micro/v2"
 	log "github.com/micro/go-micro/v2/logger"
 
-	spotify "spotify/proto/spotify"
+	spotify "github.com/domwong/spotify-micro/service-spotify/proto/spotify"
 )
 
 func main() {
@@ -18,7 +19,8 @@ func main() {
 	)
 	// Initialise service
 	service.Init()
-
+	dao.Init(service)
+	handler.Init()
 	// Register Handler
 	spotify.RegisterSpotifyHandler(service.Server(), new(handler.Spotify))
 

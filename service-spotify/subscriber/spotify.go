@@ -2,9 +2,10 @@ package subscriber
 
 import (
 	"context"
+
 	log "github.com/micro/go-micro/v2/logger"
 
-	spotify "spotify/proto/spotify"
+	spotify "github.com/domwong/spotify-micro/service-spotify/proto/spotify"
 )
 
 type Spotify struct{}

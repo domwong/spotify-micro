@@ -3,14 +3,15 @@ package handler
 import (
 	"context"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/micro/go-micro/v2/errors"
 	log "github.com/micro/go-micro/v2/logger"
 	"golang.org/x/oauth2"
 
-	"spotify/dao"
-	sp "spotify/proto/spotify"
+	"github.com/domwong/spotify-micro/service-spotify/dao"
+	sp "github.com/domwong/spotify-micro/service-spotify/proto/spotify"
 
 	spotify "github.com/zmb3/spotify"
 )
@@ -23,17 +24,20 @@ var (
 
 // Init the package
 func Init() error {
+	redirectURI = os.Getenv("SPOTIFY_REDIRECT")
+	auth = spotify.NewAuthenticator(redirectURI, spotify.ScopePlaylistModifyPrivate, spotify.ScopePlaylistReadPrivate)
+	log.Infof("Auth obj created %s", redirectURI)
 	return nil
 }
 
 // Spotify struct
 type Spotify struct{}
 
-// RootRedirect called to kick off the auth dance
+// RootRedirect called to kick off the auth dance by returning the URL to redirect the user to
 func (e *Spotify) RootRedirect(ctx context.Context, req *sp.RedirectRequest, rsp *sp.RedirectResponse) error {
 	log.Info("Received Spotify.RootRedirect request")
-	// TODO work out how to do HTTP redirects
 	// URL will be auth.AuthURL(state)
+	rsp.RedirectUrl = auth.AuthURL(state)
 	return nil
 }
 
@@ -55,7 +59,6 @@ func (e *Spotify) Callback(ctx context.Context, req *sp.CallbackRequest, rsp *sp
 		log.Errorf("Error exchanging code %s", err)
 		return errors.InternalServerError("go.mirco.service.spotify.callback", "Error exchanging code"+err.Error())
 	}
-	auth := spotify.NewAuthenticator(redirectURI, spotify.ScopePlaylistModifyPrivate, spotify.ScopePlaylistReadPrivate)
 
 	client := auth.NewClient(tok)
 	user, err := client.CurrentUser()

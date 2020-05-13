@@ -1,12 +1,12 @@
 package main
 
 import (
-	"spotify/handler"
+	"github.com/domwong/spotify-micro/api-spotify/handler"
 
 	"github.com/micro/go-micro/v2"
 	log "github.com/micro/go-micro/v2/logger"
 
-	spotify "spotify/proto/spotify"
+	sps "github.com/domwong/spotify-micro/service-spotify/proto/spotify"
 )
 
 func main() {
@@ -20,7 +20,13 @@ func main() {
 	service.Init()
 
 	// Register Handler
-	spotify.RegisterSpotifyHandler(service.Server(), new(handler.Spotify))
+	service.Server().Handle(
+		service.Server().NewHandler(
+			&handler.Spotify{
+				Client: sps.NewSpotifyService("go.micro.service.spotify", service.Client()),
+			},
+		),
+	)
 
 	// Run service
 	if err := service.Run(); err != nil {

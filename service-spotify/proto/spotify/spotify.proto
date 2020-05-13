@@ -18,6 +18,7 @@ message RedirectRequest {
 }
 
 message RedirectResponse {
+	string redirect_url = 1;
 }
 
 message CallbackRequest {
