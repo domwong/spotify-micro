@@ -2,9 +2,11 @@ package handler
 
 import (
 	"context"
+	"time"
 
 	sps "github.com/domwong/spotify-micro/service-spotify/proto/spotify"
 	api "github.com/micro/go-micro/v2/api/proto"
+	"github.com/micro/go-micro/v2/client"
 	"github.com/micro/go-micro/v2/errors"
 	log "github.com/micro/go-micro/v2/logger"
 )
@@ -61,7 +63,7 @@ func (s *Spotify) Save(ctx context.Context, req *api.Request, rsp *api.Response)
 
 	_, err := s.Client.Save(ctx, &sps.SaveRequest{
 		UserName: userPair.Values[0],
-	})
+	}, client.WithRequestTimeout(5*time.Second)) // don't actually need to change this but this is how you would do it
 
 	return err
 }

@@ -2,10 +2,10 @@ package handler
 
 import (
 	"context"
-	"fmt"
-	"os"
-	"time"
+	"encoding/json"
 
+	"github.com/micro/go-micro/v2"
+	"github.com/micro/go-micro/v2/client"
 	"github.com/micro/go-micro/v2/errors"
 	log "github.com/micro/go-micro/v2/logger"
 	"golang.org/x/oauth2"
@@ -17,27 +17,20 @@ import (
 )
 
 var (
-	redirectURI string // TODO get from env
-	auth        spotify.Authenticator
-	state       = "abc123"
+	state = "abc123"
 )
 
-// Init the package
-func Init() error {
-	redirectURI = os.Getenv("SPOTIFY_REDIRECT")
-	auth = spotify.NewAuthenticator(redirectURI, spotify.ScopePlaylistModifyPrivate, spotify.ScopePlaylistReadPrivate)
-	log.Infof("Auth obj created %s", redirectURI)
-	return nil
-}
-
 // Spotify struct
-type Spotify struct{}
+type Spotify struct {
+	Client client.Client
+	Auth   *spotify.Authenticator
+}
 
 // RootRedirect called to kick off the auth dance by returning the URL to redirect the user to
 func (e *Spotify) RootRedirect(ctx context.Context, req *sp.RedirectRequest, rsp *sp.RedirectResponse) error {
 	log.Info("Received Spotify.RootRedirect request")
 	// URL will be auth.AuthURL(state)
-	rsp.RedirectUrl = auth.AuthURL(state)
+	rsp.RedirectUrl = e.Auth.AuthURL(state)
 	return nil
 }
 
@@ -54,13 +47,13 @@ func (e *Spotify) Callback(ctx context.Context, req *sp.CallbackRequest, rsp *sp
 	if actualState != state {
 		return errors.BadRequest("go.micro.service.spotify.callback", "Redirect state parameter doesn't match")
 	}
-	tok, err := auth.Exchange(code)
+	tok, err := e.Auth.Exchange(code)
 	if err != nil {
 		log.Errorf("Error exchanging code %s", err)
 		return errors.InternalServerError("go.mirco.service.spotify.callback", "Error exchanging code"+err.Error())
 	}
 
-	client := auth.NewClient(tok)
+	client := e.Auth.NewClient(tok)
 	user, err := client.CurrentUser()
 	if err != nil {
 		log.Errorf("Error retrieving user %s", err)
@@ -82,68 +75,21 @@ func (e *Spotify) Save(ctx context.Context, in *sp.SaveRequest, out *sp.SaveResp
 		return errors.BadRequest("go.micro.service.spotify.save", "Missing username")
 	}
 
-	ue, err := dao.ReadUserEntry(username)
+	_, err := dao.ReadUserEntry(username) // check this user exists
 	if err != nil {
 		return errors.InternalServerError("go.micro.service.spotify.save", "Error retrieving entry for user")
 	}
-	auth = spotify.NewAuthenticator(redirectURI, spotify.ScopePlaylistModifyPrivate, spotify.ScopePlaylistReadPrivate)
-	client := auth.NewClient(&ue.Token)
-	if err := savePlaylists(&client, ue); err != nil {
-		return errors.InternalServerError("go.micro.service.spotify.save", err.Error())
+
+	ev := micro.NewEvent("go.micro.service.spotify", e.Client)
+	payload := map[string]interface{}{"user": username} // TODO make this a proto defined payload
+	b, err := json.Marshal(payload)
+	if err != nil {
+		return errors.InternalServerError("go.micro.service.spotify.save", "Error marshaling save request")
+	}
+	if err := ev.Publish(ctx, &sp.Event{Type: "save.request", Payload: b}); err != nil {
+		return errors.InternalServerError("go.micro.service.spotify.save", "Error publishing save request")
 	}
 
-	return nil
-}
-
-func savePlaylists(client *spotify.Client, userEntry *dao.UserEntry) error {
-	limit := 50
-	off := 0
-	for {
-		pls, err := client.CurrentUsersPlaylistsOpt(&spotify.Options{
-			Limit:  &limit,
-			Offset: &off,
-		})
-
-		if err != nil {
-			return err
-		}
-		for _, v := range pls.Playlists {
-			found := false
-			for _, p := range userEntry.Playlists {
-				if v.Name == p {
-					found = true
-					break
-				}
-			}
-			if !found {
-				continue
-			}
-
-			pl, err := client.GetPlaylist(v.ID)
-			if err != nil {
-				return err
-			}
-			plTracks := make([]spotify.ID, len(pl.Tracks.Tracks))
-			for i, tr := range pl.Tracks.Tracks {
-				plTracks[i] = tr.Track.ID
-			}
-
-			cpl, err := client.CreatePlaylistForUser(userEntry.Username, fmt.Sprintf("%s %s", v.Name, time.Now().Format("2006-01-02")), "Autosaved snapshot", false)
-			if err != nil {
-				return err
-			}
-
-			if _, err = client.AddTracksToPlaylist(cpl.ID, plTracks...); err != nil {
-				return err
-			}
-
-		}
-		if len(pls.Playlists) < limit {
-			break
-		}
-		off++
-
-	}
 	return nil
 }
 

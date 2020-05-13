@@ -55,3 +55,8 @@ message Ping {
 message Pong {
 	int64 stroke = 1;
 }
+
+message Event {
+	string type = 1;
+	bytes payload = 2;
+}
