@@ -104,9 +104,9 @@ github.com/docker/docker v1.4.2-0.20190710153559-aa8249ae1b8b/go.mod h1:eEKB0N0r
 github.com/docker/docker v1.4.2-0.20191101170500-ac7306503d23/go.mod h1:eEKB0N0r5NX/I1kEveEz05bcu8tLC/8azJZsviup8Sk=
 github.com/docker/go-connections v0.4.0/go.mod h1:Gbd7IOopHjR8Iph03tsViu4nIes5XhDvyHbTtUxmeec=
 github.com/docker/go-units v0.4.0/go.mod h1:fgPhTUdO+D/Jk86RDLlptpiXQzgHJF7gydDDbaIK4Dk=
-github.com/domwong/spotify-micro v0.0.0-20200514114908-9480832df0cb h1:OoCZY2W0bZ2dStCaEtDBaVIi3E/4V2d21P1FlAD+2Ms=
-github.com/domwong/spotify-micro/service-spotify v0.0.0-20200514114908-9480832df0cb h1:ULWkjChhhu+xc2giwO5oV7B2ZLZcLfgz+TA/BNublow=
-github.com/domwong/spotify-micro/service-spotify v0.0.0-20200514114908-9480832df0cb/go.mod h1:GmWOcHHWtOMO1xJq8wbNI2817A2q0mquCjN/85/R1U4=
+github.com/domwong/spotify-micro v0.0.2 h1:pE/K8gbb/6M9d2AgWucA8MzRCugZtOobnQ09LC8oNnU=
+github.com/domwong/spotify-micro/service-spotify v0.0.2 h1:qKld+tVqVwhOwFA3ClpEkJHvkUP/p1ea6nHuUyGgEHk=
+github.com/domwong/spotify-micro/service-spotify v0.0.2/go.mod h1:GmWOcHHWtOMO1xJq8wbNI2817A2q0mquCjN/85/R1U4=
 github.com/eapache/go-resiliency v1.1.0/go.mod h1:kFI+JgMyC7bLPUVY133qvEBtVayf5mFgVsvEsIPBvNs=
 github.com/eapache/go-xerial-snappy v0.0.0-20180814174437-776d5712da21/go.mod h1:+020luEh2TKB4/GOp8oxxtq0Daoen/Cii55CzbTV6DU=
 github.com/eapache/queue v1.1.0/go.mod h1:6eCeP0CKFpHLu8blIFXhExK/dRa7WDZfr6jVFPTqq+I=
@@ -170,6 +170,7 @@ github.com/golang/protobuf v1.2.0/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5y
 github.com/golang/protobuf v1.3.0/go.mod h1:Qd/q+1AKNOZr9uGQzbzCmRO6sUih6GTPZv6a1/R87v0=
 github.com/golang/protobuf v1.3.1/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/golang/protobuf v1.3.2/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
+github.com/golang/protobuf v1.3.5 h1:F768QJ1E9tib+q5Sc8MkdJi1RxLTbRcTf8LJV56aRls=
 github.com/golang/protobuf v1.3.5/go.mod h1:6O5/vntMXwX2lRkT1hjjk0nAC1IDOTvTlVgjlRvqsdk=
 github.com/golang/protobuf v1.4.0-rc.1/go.mod h1:ceaxUfeHdC40wWswd/P6IGgMaK3YpKi5j83Wpe3EHw8=
 github.com/golang/protobuf v1.4.0-rc.1.0.20200221234624-67d41d38c208/go.mod h1:xKAWHe0F5eneWXFV3EuXVDTCmh+JuBKY0li0aMyXATA=
