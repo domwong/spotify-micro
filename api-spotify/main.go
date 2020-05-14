@@ -29,7 +29,7 @@ func main() {
 		),
 	)
 
-	// Run service
+	// Run it
 	if err := service.Run(); err != nil {
 		log.Fatal(err)
 	}
