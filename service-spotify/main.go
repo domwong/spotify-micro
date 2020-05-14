@@ -34,7 +34,7 @@ func main() {
 	// Register Struct as Subscriber
 	micro.RegisterSubscriber("go.micro.service.spotify", service.Server(), &subscriber.Spotify{Auth: &auth})
 
-	// Run it
+	// Run it now
 	if err := service.Run(); err != nil {
 		log.Fatal(err)
 	}
