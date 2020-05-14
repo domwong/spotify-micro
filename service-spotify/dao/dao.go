@@ -31,7 +31,6 @@ func CreateUserEntry(ue *UserEntry) error {
 	if err != nil {
 		return err
 	}
-
 	return s.Options().Store.Write(&store.Record{
 		Key:   ue.Username,
 		Value: b,

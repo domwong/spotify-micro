@@ -109,7 +109,6 @@ func storeToken(username string, tok *oauth2.Token) (*dao.UserEntry, error) {
 // Stream is a server side stream handler called via client.Stream or the generated client code
 func (e *Spotify) Stream(ctx context.Context, req *sp.StreamingRequest, stream sp.Spotify_StreamStream) error {
 	log.Infof("Received Spotify.Stream request with count: %d", req.Count)
-
 	for i := 0; i < int(req.Count); i++ {
 		log.Infof("Responding: %d", i)
 		if err := stream.Send(&sp.StreamingResponse{

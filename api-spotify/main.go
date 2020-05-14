@@ -15,7 +15,6 @@ func main() {
 		micro.Name("go.micro.api.spotify"),
 		micro.Version("latest"),
 	)
-
 	// Initialise service
 	service.Init()
 

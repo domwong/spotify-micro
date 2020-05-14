@@ -55,7 +55,6 @@ func (s *Spotify) Callback(ctx context.Context, req *api.Request, rsp *api.Respo
 
 // Save does the hard work
 func (s *Spotify) Save(ctx context.Context, req *api.Request, rsp *api.Response) error {
-
 	userPair, ok := req.Get["user"]
 	if !ok {
 		return errors.BadRequest("go.micro.api.spotify.save", "missing user")

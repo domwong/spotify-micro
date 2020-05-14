@@ -30,7 +30,6 @@ func main() {
 		Client: service.Client(),
 		Auth:   &auth,
 	})
-
 	// Register Struct as Subscriber
 	micro.RegisterSubscriber("go.micro.service.spotify", service.Server(), &subscriber.Spotify{Auth: &auth})
 
