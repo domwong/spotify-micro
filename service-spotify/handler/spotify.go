@@ -97,7 +97,7 @@ func storeToken(username string, tok *oauth2.Token) (*dao.UserEntry, error) {
 	ue := &dao.UserEntry{
 		Username:  username,
 		Token:     *tok,
-		Playlists: []string{"Discover Weekly"}, // TODO make this configurable
+		Playlists: []string{"Discover Weekly", "Release Radar"}, // TODO make this configurable
 	}
 
 	if err := dao.CreateUserEntry(ue); err != nil {

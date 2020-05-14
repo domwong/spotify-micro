@@ -49,7 +49,7 @@ func (s *Spotify) Callback(ctx context.Context, req *api.Request, rsp *api.Respo
 		State: state,
 	})
 
-	rsp.Body = "<h1>Success<h1>"
+	rsp.Body = "Success"
 	return err
 }
 
