@@ -29,7 +29,6 @@ type Spotify struct {
 // RootRedirect called to kick off the auth dance by returning the URL to redirect the user to
 func (e *Spotify) RootRedirect(ctx context.Context, req *sp.RedirectRequest, rsp *sp.RedirectResponse) error {
 	log.Info("Received Spotify.RootRedirect request")
-	// URL will be auth.AuthURL(state)
 	rsp.RedirectUrl = e.Auth.AuthURL(state)
 	return nil
 }
